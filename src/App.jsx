@@ -107,6 +107,16 @@ function App() {
     }
   }
 
+  function handleCancelEdit() {
+    setTodosList(prev =>
+      prev.map(todoObj =>
+        todoObj.id === editingTodoID
+          ? { ...todoObj, isEditing: false, inputText: todoObj.savedText }
+          : todoObj
+      )
+    )
+  }
+
   function handleAddSubmit(e) {
     console.log("handleAddSubmit()");
     e.preventDefault();
@@ -146,6 +156,7 @@ function App() {
                   placeholder="Edit todo"
                 />
                 <button type="submit">Save</button>
+                <button onClick={handleCancelEdit}>Cancel</button>
               </form>
             ) : (
               /* Standard todo code part with edit and delete buttons */
