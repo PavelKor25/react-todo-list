@@ -34,7 +34,6 @@ function App() {
     if (correctTaskText !== "") {
       const newTodo = {
         id: Date.now(),
-        inputText: correctTaskText,
         savedText: correctTaskText,
         isCompleted: false,
         isEditing: false,
@@ -61,7 +60,6 @@ function App() {
           return {
             ...todoObj,
             isEditing: false,
-            inputText: prevEditingTask.savedText, // Input text must be synchronized with saved text while task isn't editing
           };
         }
         // 2. Switch task to the edit mod
@@ -81,8 +79,8 @@ function App() {
     console.log(`todoID: ${todoID}`);
     const refChosenTask = todosList.find((todo) => todo.id === todoID);
     if (!refChosenTask) return;
-    const { inputText, id } = refChosenTask;
-    setEditingTodo(inputText);
+    const { savedText, id } = refChosenTask;
+    setEditingTodo(savedText);
     setEditingTodoID(id);
   }
 
@@ -100,7 +98,6 @@ function App() {
     if (correctEditingTodo !== "") {
       updateParamsInTodoList(editingTodoID, {
         savedText: correctEditingTodo,
-        inputText: correctEditingTodo,
         isEditing: false,
       });
       setEditingTodo("");
@@ -111,7 +108,7 @@ function App() {
     setTodosList(prev =>
       prev.map(todoObj =>
         todoObj.id === editingTodoID
-          ? { ...todoObj, isEditing: false, inputText: todoObj.savedText }
+          ? { ...todoObj, isEditing: false, }
           : todoObj
       )
     )
@@ -178,7 +175,6 @@ function App() {
       <div style={{ border: "black solid 1px" }}>
         <p>todoText: {todoText}</p>
         <p>editingTodo.id: {editingTodo?.id}</p>
-        <p>editingTodo.inputText: {editingTodo?.inputText}</p>
         <p>editingTodo.savedText: {editingTodo?.savedText}</p>
         <p>todosList[0].id: {todosList[0]?.id}</p>
       </div>
