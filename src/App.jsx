@@ -54,7 +54,7 @@ function App() {
 
     setTodosList((prev) =>
       prev.map((todoObj) => {
-        // 1. Close last task edit if this exists
+        // 1. Close last task edit if exists
         if (prevEditingTask && prevEditingTask.id === todoObj.id) {
           console.log(`first cognition setTodos() called`);
           return {
@@ -86,7 +86,26 @@ function App() {
 
   function handleDelete(e) {
     console.log("handleDelete()");
-    const todoID = e.target.name;
+    const todoID = Number(e.target.name);
+    const prevEditingTask = isAnyTaskEditing ? todosList[editTaskIndex] : null;
+
+    setTodosList(prev => {
+      return prev
+        .filter(todoObj => todoObj.id !== todoID)
+        .map(todoObj => {
+          // 1. Close last task edit if exists
+          if (prevEditingTask && prevEditingTask.id === todoObj.id) {
+            console.log(`first cognition handleDelete() called`);
+            return {
+              ...todoObj,
+              isEditing: false,
+            };
+          }
+          // 2. Return rest of todo objects
+          return todoObj;
+        })
+    })
+
   }
 
   function handleClearAll() {
@@ -162,7 +181,6 @@ function App() {
                 <button name={todo.id} onClick={handleEdit}>
                   Change
                 </button>
-                {/* Потом важно будет разобраться в обработки удаления - где и как расставить форму */}
                 <button name={todo.id} onClick={handleDelete}>
                   Delete
                 </button>
