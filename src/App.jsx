@@ -110,6 +110,10 @@ function App() {
 
   function handleClearAll() {
     console.log("handleClearAll()");
+    setTodoText("");
+    setEditingTodo("");
+    setEditingTodoID();
+    setTodosList([]);
   }
 
   function handleChange() {
