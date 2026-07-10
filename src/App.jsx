@@ -72,8 +72,7 @@ function App() {
         }
         // 3. All other tasks not changed
         return todoObj;
-      }),
-    );
+      }));
     console.log(`setTodosList() completed in handleEdit()`);
 
     console.log(`todoID: ${todoID}`);
@@ -82,6 +81,7 @@ function App() {
     const { savedText, id } = refChosenTask;
     setEditingTodo(savedText);
     setEditingTodoID(id);
+    setTodoText("");
   }
 
   function handleDelete(e) {
@@ -157,7 +157,7 @@ function App() {
           placeholder="Add your new todo:"
         />
         <button type="submit">add todo</button>
-        <button onClick={handleClearAll}>clear all</button>
+        <button onClick={handleClearAll}>clear all tasks</button>
       </form>
 
       <ul>
