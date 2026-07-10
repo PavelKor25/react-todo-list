@@ -8,7 +8,7 @@ function App() {
     return savedTodos ? JSON.parse(savedTodos) : [];
   });
   const [editingTodo, setEditingTodo] = useState(""); // Chosen todo-text for edit
-  const [editingTodoID, setEditingTodoID] = useState(); // ID of editing todo object
+  const [editingTodoID, setEditingTodoID] = useState(null); // ID of editing todo object
 
   // after re-render these constants update data and takes changed result
   // Index of edit task object from todosList, returns -1 if this isn't exist
@@ -112,7 +112,7 @@ function App() {
     console.log("handleClearAll()");
     setTodoText("");
     setEditingTodo("");
-    setEditingTodoID();
+    setEditingTodoID(null);
     setTodosList([]);
   }
 
