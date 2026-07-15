@@ -137,6 +137,10 @@ function App() {
     )
   }
 
+  function handleToggleComplete(id, currentStatus) {
+    updateParamsInTodoList(id, { isCompleted: !currentStatus })
+  }
+
   function handleAddSubmit(e) {
     console.log("handleAddSubmit()");
     e.preventDefault();
@@ -175,13 +179,24 @@ function App() {
                   onInput={(e) => setEditingTodo(e.target.value)}
                   placeholder="Edit todo"
                 />
-                <button type="submit">Save</button>
-                <button onClick={handleCancelEdit}>Cancel</button>
+                <button type="submit">
+                  Save
+                </button>
+                <button onClick={handleCancelEdit}>
+                  Cancel
+                </button>
               </form>
             ) : (
               /* Standard todo code part with edit and delete buttons */
               <>
-                <p>{todo.savedText}</p>
+                <input
+                  type="checkbox"
+                  checked={todo.isCompleted}
+                  onChange={() => handleToggleComplete(todo.id, todo.isCompleted)}
+                />
+                <p style={{ textDecoration: todo.isCompleted ? "line-through" : "none" }}>
+                  {todo.savedText}
+                </p>
                 <button name={todo.id} onClick={handleEdit}>
                   Change
                 </button>
