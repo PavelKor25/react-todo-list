@@ -6,7 +6,7 @@ function App() {
   const [todosList, setTodosList] = useState(() => {
     const savedTodos = localStorage.getItem("todos"); // 'todos' is the Key of localStorage data
     return savedTodos ? JSON.parse(savedTodos) : [];
-  });
+  })
   const [editingTodo, setEditingTodo] = useState(""); // Chosen todo-text for edit
   const [editingTodoID, setEditingTodoID] = useState(null); // ID of editing todo object
 
@@ -170,7 +170,7 @@ function App() {
 
       <ul>
         {todosList.map((todo) => (
-          <div key={todo.id} style={{ backgroundColor: "rgb(235, 195, 135)" }}>
+          <div key={todo.id} className="todo-item-container">
             {todo.isEditing ? (
               /* Editing code part for only selected todo */
               <form onSubmit={handleEditSubmit}>
