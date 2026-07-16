@@ -6,8 +6,10 @@ body {
 
 .app-container {
   width: 90vw;
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 40px;
+  font-size: 1.2rem;
 }
 
 .todo-item-container {
