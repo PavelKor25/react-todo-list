@@ -1,7 +1,12 @@
 body {
-  padding: 20px;
   font-family: sans-serif;
   background-color: #fafafa;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
 }
 
 .app-container {
@@ -44,6 +49,13 @@ body {
   align-items: center;
   flex-wrap: nowrap;
   gap: 6px;
+}
+
+.add-todo-form {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding-bottom: 12px;
 }
 
 @media (max-width: 450px) {

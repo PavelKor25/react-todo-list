@@ -157,7 +157,10 @@ function App() {
     <div className="app-container">
       <h1>Todo list</h1>
 
-      <form hidden={isAnyTaskEditing} onSubmit={handleAddSubmit}>
+      <form
+        className="add-todo-form"
+        hidden={isAnyTaskEditing}
+        onSubmit={handleAddSubmit}>
         <input
           type="text"
           value={todoText}
