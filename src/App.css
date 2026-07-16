@@ -24,8 +24,37 @@ body {
   border: 1px solid #d9e2ec;
 }
 
+.todo-item-container form {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+  align-items: center;
+}
+
 .todo-item-container p {
   text-align: left;
   flex-grow: 1;
   margin: 0;
+}
+
+.edit-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+
+@media (max-width: 450px) {
+  .app-container {
+    font-size: 1rem;
+  }
+
+  .edit-buttons {
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: stretch;
+  }
 }

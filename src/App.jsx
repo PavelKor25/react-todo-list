@@ -179,12 +179,15 @@ function App() {
                   onInput={(e) => setEditingTodo(e.target.value)}
                   placeholder="Edit todo"
                 />
-                <button type="submit">
-                  Save
-                </button>
-                <button onClick={handleCancelEdit}>
-                  Cancel
-                </button>
+                <div className="edit-buttons">
+                  <button type="submit">
+                    Save
+                  </button>
+                  <button onClick={handleCancelEdit}>
+                    Cancel
+                  </button>
+                </div>
+
               </form>
             ) : (
               /* Standard todo code part with edit and delete buttons */
@@ -197,7 +200,7 @@ function App() {
                 <p style={{ textDecoration: todo.isCompleted ? "line-through" : "none" }}>
                   {todo.savedText}
                 </p>
-                <div style={{ display: "flex", gap: "6px" }}>
+                <div className="edit-buttons">
                   <button name={todo.id} onClick={handleEdit}>
                     Change
                   </button>
