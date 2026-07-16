@@ -3,19 +3,19 @@ import "./App.css";
 
 function App() {
   const [todoText, setTodoText] = useState("");
+  // Using lazy initialization to avoid reading from localStorage on every render
   const [todosList, setTodosList] = useState(() => {
-    const savedTodos = localStorage.getItem("todos"); // 'todos' is the Key of localStorage data
+    const savedTodos = localStorage.getItem("todos");
     return savedTodos ? JSON.parse(savedTodos) : [];
   })
-  const [editingTodo, setEditingTodo] = useState(""); // Chosen todo-text for edit
-  const [editingTodoID, setEditingTodoID] = useState(null); // ID of editing todo object
+  const [editingTodo, setEditingTodo] = useState("");         // Chosen todo-text for edit
+  const [editingTodoID, setEditingTodoID] = useState(null);   // ID of editing todo object
 
-  // after re-render these constants update data and takes changed result
-  // Index of edit task object from todosList, returns -1 if this isn't exist
-  const editTaskIndex = todosList.findIndex((todo) => todo.isEditing);
-  const isAnyTaskEditing = editTaskIndex !== -1;
+  // Index of the task currently being edited (returns -1 if none)
+  const editingTaskIndex = todosList.findIndex((todo) => todo.isEditing);
+  const hasActiveEditTask = editingTaskIndex !== -1;
 
-  const updateParamsInTodoList = (id, updateParams) =>
+  const updateTodoParams = (id, updateParams) =>
     setTodosList((prev) =>
       prev.map((todoObj) =>
         todoObj.id === id ? { ...todoObj, ...updateParams } : todoObj,
@@ -23,13 +23,10 @@ function App() {
     );
 
   useEffect(() => {
-    console.log("useEffect activated");
     localStorage.setItem("todos", JSON.stringify(todosList));
   }, [todosList]);
 
-  // Add new todo to the list
   function handleAddTodo(taskText) {
-    console.log("addTodo()");
     const correctTaskText = taskText.trim();
     if (correctTaskText !== "") {
       const newTodo = {
@@ -40,42 +37,34 @@ function App() {
       };
       setTodosList((prev) => [...prev, newTodo]);
       setTodoText("");
-    } else {
-      console.log("Nothing added. Empty todo text.");
     }
   }
 
   // Start editing todo text
   function handleEdit(e) {
-    console.log("handleEdit()");
     const todoID = Number(e.target.name);
-    const prevEditingTask = isAnyTaskEditing ? todosList[editTaskIndex] : null;
-    console.log(`prevEditingTask: ${JSON.stringify(prevEditingTask)}`);
+    const prevEditingTask = hasActiveEditTask ? todosList[editingTaskIndex] : null;
 
     setTodosList((prev) =>
       prev.map((todoObj) => {
-        // 1. Close last task edit if exists
+        // 1. Close previous task edit mode if it exists
         if (prevEditingTask && prevEditingTask.id === todoObj.id) {
-          console.log(`first cognition setTodos() called`);
           return {
             ...todoObj,
             isEditing: false,
           };
         }
-        // 2. Switch task to the edit mod
+        // 2. Switch the selected task to edit mode
         if (todoObj.id === todoID) {
-          console.log(`second cognition setTodos() called`);
           return {
             ...todoObj,
             isEditing: true,
           };
         }
-        // 3. All other tasks not changed
+        // 3. Keep all other tasks unchanged
         return todoObj;
       }));
-    console.log(`setTodosList() completed in handleEdit()`);
 
-    console.log(`todoID: ${todoID}`);
     const refChosenTask = todosList.find((todo) => todo.id === todoID);
     if (!refChosenTask) return;
     const { savedText, id } = refChosenTask;
@@ -85,9 +74,8 @@ function App() {
   }
 
   function handleDelete(e) {
-    console.log("handleDelete()");
     const todoID = Number(e.target.name);
-    const prevEditingTask = isAnyTaskEditing ? todosList[editTaskIndex] : null;
+    const prevEditingTask = hasActiveEditTask ? todosList[editingTaskIndex] : null;
 
     setTodosList(prev => {
       return prev
@@ -95,7 +83,6 @@ function App() {
         .map(todoObj => {
           // 1. Close last task edit if exists
           if (prevEditingTask && prevEditingTask.id === todoObj.id) {
-            console.log(`first cognition handleDelete() called`);
             return {
               ...todoObj,
               isEditing: false,
@@ -109,7 +96,6 @@ function App() {
   }
 
   function handleClearAll() {
-    console.log("handleClearAll()");
     setTodoText("");
     setEditingTodo("");
     setEditingTodoID(null);
@@ -119,7 +105,7 @@ function App() {
   function handleChange() {
     const correctEditingTodo = editingTodo.trim();
     if (correctEditingTodo !== "") {
-      updateParamsInTodoList(editingTodoID, {
+      updateTodoParams(editingTodoID, {
         savedText: correctEditingTodo,
         isEditing: false,
       });
@@ -138,17 +124,15 @@ function App() {
   }
 
   function handleToggleComplete(id, currentStatus) {
-    updateParamsInTodoList(id, { isCompleted: !currentStatus })
+    updateTodoParams(id, { isCompleted: !currentStatus })
   }
 
   function handleAddSubmit(e) {
-    console.log("handleAddSubmit()");
     e.preventDefault();
     handleAddTodo(todoText);
   }
 
   function handleEditSubmit(e) {
-    console.log("handleEditSubmit()");
     e.preventDefault();
     handleChange();
   }
@@ -156,10 +140,9 @@ function App() {
   return (
     <div className="app-container">
       <h1>Todo list</h1>
-
       <form
         className="add-todo-form"
-        hidden={isAnyTaskEditing}
+        hidden={hasActiveEditTask}
         onSubmit={handleAddSubmit}>
         <input
           type="text"
@@ -175,7 +158,7 @@ function App() {
         {todosList.map((todo) => (
           <div key={todo.id} className="todo-item-container">
             {todo.isEditing ? (
-              /* Editing code part for only selected todo */
+              /* Edit mode layout for the selected todo */
               <form onSubmit={handleEditSubmit}>
                 <input
                   value={editingTodo}
@@ -190,10 +173,9 @@ function App() {
                     Cancel
                   </button>
                 </div>
-
               </form>
             ) : (
-              /* Standard todo code part with edit and delete buttons */
+              /* Default view layout with complete, edit, and delete actions */
               <>
                 <input
                   type="checkbox"
@@ -211,19 +193,11 @@ function App() {
                     Delete
                   </button>
                 </div>
-
               </>
             )}
           </div>
         ))}
       </ul>
-
-      <div style={{ border: "black solid 1px" }}>
-        <p>todoText: {todoText}</p>
-        <p>editingTodo.id: {editingTodo?.id}</p>
-        <p>editingTodo.savedText: {editingTodo?.savedText}</p>
-        <p>todosList[0].id: {todosList[0]?.id}</p>
-      </div>
     </div>
   );
 }
