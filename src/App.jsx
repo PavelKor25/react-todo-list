@@ -154,7 +154,7 @@ function App() {
   }
 
   return (
-    <>
+    <div className="app-container">
       <h1>Todo list</h1>
 
       <form hidden={isAnyTaskEditing} onSubmit={handleAddSubmit}>
@@ -197,12 +197,15 @@ function App() {
                 <p style={{ textDecoration: todo.isCompleted ? "line-through" : "none" }}>
                   {todo.savedText}
                 </p>
-                <button name={todo.id} onClick={handleEdit}>
-                  Change
-                </button>
-                <button name={todo.id} onClick={handleDelete}>
-                  Delete
-                </button>
+                <div style={{ display: "flex", gap: "6px" }}>
+                  <button name={todo.id} onClick={handleEdit}>
+                    Change
+                  </button>
+                  <button name={todo.id} onClick={handleDelete}>
+                    Delete
+                  </button>
+                </div>
+
               </>
             )}
           </div>
@@ -215,7 +218,7 @@ function App() {
         <p>editingTodo.savedText: {editingTodo?.savedText}</p>
         <p>todosList[0].id: {todosList[0]?.id}</p>
       </div>
-    </>
+    </div>
   );
 }
 
