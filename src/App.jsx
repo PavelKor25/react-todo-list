@@ -41,8 +41,7 @@ function App() {
   }
 
   // Start editing todo text
-  function handleEdit(e) {
-    const todoID = Number(e.target.name);
+  function handleEdit(todoID, todoSavedText) {
     const prevEditingTask = hasActiveEditTask ? todosList[editingTaskIndex] : null;
 
     setTodosList((prev) =>
@@ -65,11 +64,8 @@ function App() {
         return todoObj;
       }));
 
-    const refChosenTask = todosList.find((todo) => todo.id === todoID);
-    if (!refChosenTask) return;
-    const { savedText, id } = refChosenTask;
-    setEditingTodo(savedText);
-    setEditingTodoID(id);
+    setEditingTodo(todoSavedText);
+    setEditingTodoID(todoID);
     setTodoText("");
   }
 
@@ -186,7 +182,7 @@ function App() {
                   {todo.savedText}
                 </p>
                 <div className="edit-buttons">
-                  <button name={todo.id} onClick={handleEdit}>
+                  <button onClick={() => handleEdit(todo.id, todo.savedText)}>
                     Change
                   </button>
                   <button name={todo.id} onClick={handleDelete}>
