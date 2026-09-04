@@ -13,7 +13,7 @@ function App() {
 
   // Index of the task currently being edited (returns -1 if none)
   const editingTaskIndex = todosList.findIndex((todo) => todo.isEditing);
-  const hasActiveEditTask = editingTaskIndex !== -1;
+  const hasActiveEditTask = (editingTaskIndex !== -1);
 
   const updateTodoParams = (id, updateParams) =>
     setTodosList((prev) =>
@@ -106,6 +106,7 @@ function App() {
         isEditing: false,
       });
       setEditingTodo("");
+      setEditingTodoID(null);
     }
   }
 
@@ -138,11 +139,11 @@ function App() {
       <h1>Todo list</h1>
       <form
         className="add-todo-form"
-        hidden={hasActiveEditTask}
         onSubmit={handleAddSubmit}>
         <input
           type="text"
           value={todoText}
+          disabled={hasActiveEditTask}
           onInput={(e) => setTodoText(e.target.value)}
           placeholder="Add your new todo:"
         />
